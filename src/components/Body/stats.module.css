@@ -1,0 +1,16 @@
+.list {
+    list-style: none;
+    padding: 0;
+}
+
+.good {
+    color: green;
+}
+
+.neutral {
+    color: orange
+}
+
+.bad {
+    color: red;
+}
