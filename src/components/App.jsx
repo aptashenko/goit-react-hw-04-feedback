@@ -3,57 +3,65 @@ import Title from "./Title/Title";
 import Buttons from "./Buttons/Buttons";
 import Statistic from "./Body/Statistic";
 import Notification from "./Notif/Notification";
+import { useState } from "react";
 
-class App extends React.Component {
-  state = {
-      good: 0,
-      neutral: 0,
-      bad: 0
+export default function App() {
+  const [good, setGoodFeedback] = useState(0);
+  const [neutral, setNeutralFeedback] = useState(0);
+  const [bad, setBadFeedback] = useState(0);
+
+  const feedbackName = ['good', 'neutral', 'bad']
+
+  const handleClick = (data) => {
+    switch (data) {
+      case 'good':
+        setGoodFeedback(s => s + 1);
+        break
+      case 'neutral':
+        setNeutralFeedback(s => s + 1);
+        break
+      case 'bad':
+        setBadFeedback(s => s + 1);
+        break
+      default:
+        return
+    }
   }
 
-  handleClick = (item) => {
-    this.setState(prevState => ({
-      [item]: prevState[item] += 1,
-    }))
-    this.countTotalFeedback();
-  }
-
-  countTotalFeedback = () => {
-    const buttonsValues = Object.values(this.state);
+  const totalReviewsCount = (arrayOfValues) => {
     let totalValue = 0;
-    buttonsValues.forEach(item => {
+    arrayOfValues.forEach(item => {
       totalValue += item;
     })
     return totalValue;
   }
 
-  countPositiveFeedbackPercentage = () => {
-    if (this.state.good !== 0) {
-      const totalFeedBack = this.countTotalFeedback();
-      let positiveFeedBack = (this.state.good / totalFeedBack) * 100;
+  const totalFeeback = totalReviewsCount([good, neutral, bad])
+
+  const positiveFeedbackRate = (totalFeebackAmount) => {
+    if (good !== 0) {
+      const totalFeedBack = totalFeebackAmount;
+      let positiveFeedBack = (good / totalFeedBack) * 100;
       return positiveFeedBack.toFixed(2);
     } else {
       return 'there is no positive feedback :(';
     }
   }
 
-  render() {
-    const buttonsNames = Object.keys(this.state);
-    const buttonsValues = Object.values(this.state);
+  const positivePercent = positiveFeedbackRate(totalFeeback);
+  
+
     return (
       <div className="container">
         <Title title="Please,leave your feedback">
-            <Buttons buttonsNames={buttonsNames} handleClick={this.handleClick} />
+            <Buttons buttonsNames={feedbackName} handleClick={handleClick} />
         </Title>
         <Title title="Statistic">
-          {this.countTotalFeedback() === 0 ?
+          {totalFeeback === 0 ?
             <Notification message="There is no feedback" /> :
-            <Statistic buttonsValues={buttonsValues} buttonsNames={buttonsNames} percent={this.countPositiveFeedbackPercentage} count={this.countTotalFeedback} />
+            <Statistic buttonsValues={[good, neutral, bad]} buttonsNames={feedbackName} percent={positivePercent} count={totalFeeback} />
         }
         </Title>
       </div>
     )
-  }
 }
-
-export default App;

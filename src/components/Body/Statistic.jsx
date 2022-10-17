@@ -6,16 +6,16 @@ const Statistic = ({ buttonsValues, buttonsNames, count, percent }) => (
         {buttonsValues.map((item, idx) => (
             <li key={idx}>{buttonsNames[idx]}: <span className={item > 0 ? css[buttonsNames[idx]] : ''}>{ item }</span></li>
         ))}
-        <li>Total: { count() }</li>
-        <li>Positive Feedback: <span>{ percent() }</span></li>
+        <li>Total: { count }</li>
+        <li>Positive Feedback: <span>{ percent }</span></li>
     </ul>
 )
 
 Statistic.propTypes = {
     buttonsValues: PropTypes.array,
     buttonsNames: PropTypes.array,
-    count: PropTypes.func,
-    percent: PropTypes.func,
+    count: PropTypes.number,
+    percent: PropTypes.string,
     item: PropTypes.string
 }
 
